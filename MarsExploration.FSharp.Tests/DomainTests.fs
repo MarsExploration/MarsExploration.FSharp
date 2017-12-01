@@ -5,7 +5,7 @@ open Xunit
 
 [<Fact>]
 let ``sample input should retrieve expected results``() =
-    let input = { SuperiorRightLimit = 5
+    let input = { SuperiorRightLimit = {X = 5; Y = 5}
                   ProbesData = [|
 
                                 { InitialPosition = { Coordinates = { X = 1; Y = 2}; Direction = North }

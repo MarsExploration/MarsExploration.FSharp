@@ -12,7 +12,7 @@ type Position = { Coordinates: Coordinates
 type ProbeData = { InitialPosition: Position
                    Commands: ProbeCommand[] }
 
-type Input = { SuperiorRightLimit: int
+type Input = { SuperiorRightLimit: Coordinates
                ProbesData: ProbeData[] }
 
 type Output = { ProbesFinalPositions: Position seq }
@@ -38,14 +38,14 @@ let private move(previousPosition, upperRightLimit) =
     match previousPosition.Direction with
          | North -> 
                    let nextPosition = previousPosition.Coordinates.Y + 1
-                   if nextPosition <= upperRightLimit then
+                   if nextPosition <= upperRightLimit.Y then
                       { previousPosition with Coordinates = { previousPosition.Coordinates with Y = nextPosition } }
                    else 
                       previousPosition
 
          | East -> 
                     let nextPosition = previousPosition.Coordinates.X + 1
-                    if nextPosition <= upperRightLimit then
+                    if nextPosition <= upperRightLimit.X then
                         { previousPosition with Coordinates = { previousPosition.Coordinates with X = nextPosition } }
                     else
                         previousPosition
