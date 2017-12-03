@@ -4,13 +4,13 @@ type Coordinates = { X: int; Y: int }
 
 type Direction = | North | Weast | South | East
 
-type ProbeCommand = | TurnRight | TurnLeft | Move
+type ProbeAction = | TurnRight | TurnLeft | Move
 
 type Position = { Coordinates: Coordinates
                   Direction: Direction }
 
 type ProbeData = { InitialPosition: Position
-                   Commands: ProbeCommand[] }
+                   Actions: ProbeAction[] }
 
 type Input = { SuperiorRightLimit: Coordinates
                ProbesData: ProbeData[] }
@@ -34,46 +34,46 @@ let private turnLeft(previousDirection) =
          | South -> East
          | Weast -> South
      
-let private move(previousPosition, upperRightLimit) =
+let private move previousPosition upperRightLimit =
     match previousPosition.Direction with
          | North -> 
-                   let nextPosition = previousPosition.Coordinates.Y + 1
-                   if nextPosition <= upperRightLimit.Y then
-                      { previousPosition with Coordinates = { previousPosition.Coordinates with Y = nextPosition } }
+                   let nextY = previousPosition.Coordinates.Y + 1
+                   if nextY <= upperRightLimit.Y then
+                      { previousPosition with Coordinates = { previousPosition.Coordinates with Y = nextY } }
                    else 
                       previousPosition
 
          | East -> 
-                    let nextPosition = previousPosition.Coordinates.X + 1
-                    if nextPosition <= upperRightLimit.X then
-                        { previousPosition with Coordinates = { previousPosition.Coordinates with X = nextPosition } }
+                    let nextX = previousPosition.Coordinates.X + 1
+                    if nextX <= upperRightLimit.X then
+                        { previousPosition with Coordinates = { previousPosition.Coordinates with X = nextX } }
                     else
                         previousPosition
 
-         | South -> let nextPosition = previousPosition.Coordinates.Y - 1
-                    if nextPosition >= LOWER_LEFT_LIMIT then
-                       { previousPosition with Coordinates = { previousPosition.Coordinates with Y = nextPosition } }
+         | South -> let nextY = previousPosition.Coordinates.Y - 1
+                    if nextY >= LOWER_LEFT_LIMIT then
+                       { previousPosition with Coordinates = { previousPosition.Coordinates with Y = nextY } }
                     else 
                        previousPosition
 
          | Weast -> 
-                    let nextPosition = previousPosition.Coordinates.X - 1
-                    if nextPosition >= LOWER_LEFT_LIMIT then
-                        { previousPosition with Coordinates = { previousPosition.Coordinates with X = nextPosition } }
+                    let nextX = previousPosition.Coordinates.X - 1
+                    if nextX >= LOWER_LEFT_LIMIT then
+                        { previousPosition with Coordinates = { previousPosition.Coordinates with X = nextX } }
                     else
                         previousPosition
 
-let private executeProbeCommand upperRightLimit previousPosition command =
-    match command with
+let private executeProbeCommand upperRightLimit previousPosition action =
+    match action with
         | TurnRight -> { previousPosition with Direction = turnRight(previousPosition.Direction) }
         | TurnLeft ->  { previousPosition with Direction = turnLeft(previousPosition.Direction) }
-        | Move -> move(previousPosition, upperRightLimit)
+        | Move -> move previousPosition upperRightLimit
     
 let executeProbeCommands(input) : Output =
     let probesFinalPositions = 
         input.ProbesData |> 
         Seq.map(fun probeData -> 
-                probeData.Commands |> 
+                probeData.Actions |> 
                 Seq.fold (executeProbeCommand input.SuperiorRightLimit) probeData.InitialPosition)
 
     { ProbesFinalPositions = probesFinalPositions }

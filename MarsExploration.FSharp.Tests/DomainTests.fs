@@ -9,17 +9,17 @@ let ``sample input should retrieve expected results``() =
                   ProbesData = [|
 
                                 { InitialPosition = { Coordinates = { X = 1; Y = 2}; Direction = North }
-                                  Commands = [| TurnLeft; Move 
-                                                TurnLeft; Move 
-                                                TurnLeft; Move 
-                                                TurnLeft; Move
+                                  Actions = [|  TurnLeft; Move;
+                                                TurnLeft; Move;
+                                                TurnLeft; Move;
+                                                TurnLeft; Move;
                                                 Move |]}
 
                                 { InitialPosition = { Coordinates = { X = 3; Y = 3}; Direction = East }
-                                  Commands = [| Move; Move; TurnRight
-                                                Move; Move; TurnRight
-                                                Move; TurnRight
-                                                TurnRight; Move |]}
+                                  Actions = [| Move; Move; TurnRight;
+                                               Move; Move; TurnRight;
+                                               Move; TurnRight;
+                                               TurnRight; Move |]}
 
                                |] }
     let result = executeProbeCommands(input)
